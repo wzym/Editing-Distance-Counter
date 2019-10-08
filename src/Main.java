@@ -16,24 +16,24 @@ public class Main {
     private int getLevenshteinDistance(String[] strings) {
         String a = strings[0];
         String b = strings[1];
-        int [][] distances = new int[a.length() + 1][b.length() + 1];
+        int[] prev = new int[a.length() + 1];
+        int[] cur = new int[a.length() + 1];
         for (int i = 0; i <= a.length(); i++) {
-            distances[i][0] = i;
-        }
-        for (int i = 0; i <= b.length(); i++) {
-            distances[0][i] = i;
+            cur[i] = i;
         }
         for (int bIndex = 1; bIndex <= b.length(); bIndex++) {
+            int[] buf = cur;
+            cur = prev;
+            prev = buf;
+            cur[0] = bIndex;
             for (int aIndex = 1; aIndex <= a.length(); aIndex++) {
-                int up = distances[aIndex][bIndex - 1];
-                int left = distances[aIndex - 1][bIndex];
-                int upLeft = distances[aIndex - 1][bIndex - 1];
-                int changeCost = getChangeCost(a.charAt(aIndex - 1), b.charAt(bIndex - 1));
-                int curMin = Math.min(Math.min(up + 1, left + 1), upLeft + changeCost);
-                distances[aIndex][bIndex] = curMin;
+                int up = prev[aIndex] + 1;
+                int left = cur[aIndex - 1] + 1;
+                int upLeft = prev[aIndex - 1] + getChangeCost(a.charAt(aIndex - 1), b.charAt(bIndex - 1));
+                cur[aIndex] = Math.min(Math.min(up, left), upLeft);
             }
         }
-        return distances[a.length()][b.length()];
+        return cur[a.length()];
     }
 
     private int getChangeCost(char a, char b) {
