@@ -1,7 +1,7 @@
 import java.io.BufferedReader;
-//import java.io.FileReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+//import java.io.InputStreamReader;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -14,8 +14,15 @@ public class Main {
     }
 
     private int getLevenshteinDistance(String[] strings) {
-        String a = strings[0];
-        String b = strings[1];
+        String a;
+        String b;
+        if (strings[0].length() < strings[1].length()) {
+            a = strings[0];
+            b = strings[1];
+        } else {
+            a = strings[1];
+            b = strings[0];
+        }
         int[] prev = new int[a.length() + 1];
         int[] cur = new int[a.length() + 1];
         for (int i = 0; i <= a.length(); i++) {
@@ -41,8 +48,8 @@ public class Main {
     }
 
     private String[] readStrings() throws IOException {
-        //BufferedReader bf = new BufferedReader(new FileReader("Test.txt"));
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader bf = new BufferedReader(new FileReader("Test.txt"));
+        //BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         String[] result = new String[2];
         result[0] = bf.readLine();
         result[1] = bf.readLine();
